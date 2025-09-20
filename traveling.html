@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust Travel - Jelajahi Dunia Bersama Kami</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%2306b6d4" width="1200" height="600"/><circle fill="%23f59e0b" cx="200" cy="150" r="80"/><polygon fill="%2310b981" points="400,200 600,100 800,250 1000,150 1200,300 1200,600 0,600"/><circle fill="%23ffffff" cx="900" cy="100" r="20" opacity="0.3"/><circle fill="%23ffffff" cx="300" cy="400" r="15" opacity="0.4"/></svg>');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        .modal {
+            display: none;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .admin-section {
+            transition: all 0.3s ease;
+        }
+        
+        .admin-nav-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .admin-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50">
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-lg fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg mr-3">
+                        <i class="fas fa-plane text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">Wanderlust Travel</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" onclick="showPage('home')" class="nav-link text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium">Beranda</a>
+                    <a href="#" onclick="showPage('destinations')" class="nav-link text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium">Destinasi</a>
+                    <a href="#" onclick="showPage('packages')" class="nav-link text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium">Paket</a>
+                    <a href="#" onclick="showPage('about')" class="nav-link text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium">Tentang</a>
+                    <a href="#" onclick="showPage('contact')" class="nav-link text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium">Kontak</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Search Button -->
+                    <button onclick="showSearchModal()" class="text-gray-700 hover:text-blue-600 p-2 rounded-lg hover:bg-gray-100 transition-all duration-300" title="Cari destinasi">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                    
+                    <!-- Profile Menu -->
+                    <div id="profileMenu" class="hidden relative">
+                        <button onclick="toggleProfileDropdown()" class="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2.5 rounded-full hover:from-green-600 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl">
+                            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user-shield text-white text-sm"></i>
+                            </div>
+                            <span class="font-medium">Admin</span>
+                            <i class="fas fa-chevron-down text-sm transition-transform duration-200" id="profileChevron"></i>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-teal-400 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user-shield text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-800">Administrator</p>
+                                        <p class="text-sm text-gray-500">admin@wanderlust.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="py-1">
+                                <button onclick="showPage('admin'); toggleProfileDropdown()" class="w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                                    <i class="fas fa-cog text-green-600 mr-3 w-5"></i>
+                                    <span class="font-medium">Panel Admin</span>
+                                </button>
+                                
+                                <button onclick="logout(); toggleProfileDropdown()" class="w-full flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                                    <i class="fas fa-sign-out-alt text-red-500 mr-3 w-5"></i>
+                                    <span class="font-medium">Keluar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Login Button -->
+                    <div id="loginButton">
+                        <button onclick="showLoginModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 font-medium">
+                            <i class="fas fa-user mr-2"></i>Masuk
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-all duration-300" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black/50 z-40 hidden">
+        <div class="bg-white w-64 h-full p-6 pt-20">
+            <a href="#" onclick="showPage('home'); toggleMobileMenu()" class="block py-3 text-gray-700 hover:text-blue-600 transition-colors">Beranda</a>
+            <a href="#" onclick="showPage('destinations'); toggleMobileMenu()" class="block py-3 text-gray-700 hover:text-blue-600 transition-colors">Destinasi</a>
+            <a href="#" onclick="showPage('packages'); toggleMobileMenu()" class="block py-3 text-gray-700 hover:text-blue-600 transition-colors">Paket</a>
+            <a href="#" onclick="showPage('about'); toggleMobileMenu()" class="block py-3 text-gray-700 hover:text-blue-600 transition-colors">Tentang</a>
+            <a href="#" onclick="showPage('contact'); toggleMobileMenu()" class="block py-3 text-gray-700 hover:text-blue-600 transition-colors">Kontak</a>
+            <a href="#" onclick="showSearchModal(); toggleMobileMenu()" class="flex items-center py-3 text-gray-700 hover:text-blue-600 transition-colors">
+                <i class="fas fa-search mr-3"></i>Cari Destinasi
+            </a>
+            
+            <!-- Mobile Admin Section -->
+            <div id="mobileAdminAccess" class="hidden border-t border-gray-200 mt-4 pt-4">
+                <div class="bg-gradient-to-r from-green-50 to-teal-50 rounded-lg p-4 mb-4">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-teal-400 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-user-shield text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-800">Administrator</p>
+                            <p class="text-xs text-gray-600">admin@wanderlust.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" onclick="showPage('admin'); toggleMobileMenu()" class="flex items-center py-3 px-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg font-medium transition-all duration-200">
+                    <i class="fas fa-cog mr-3 w-5"></i>Panel Admin
+                </a>
+                <a href="#" onclick="logout(); toggleMobileMenu()" class="flex items-center py-3 px-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg font-medium transition-all duration-200">
+                    <i class="fas fa-sign-out-alt mr-3 w-5"></i>Keluar
+                </a>
+            </div>
+            
+            <!-- Mobile Login Button -->
+            <div id="mobileLoginButton" class="border-t border-gray-200 mt-4 pt-4">
+                <button onclick="showLoginModal(); toggleMobileMenu()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 font-medium">
+                    <i class="fas fa-user mr-2"></i>Masuk
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Home Page -->
+        <div id="homePage" class="page-content active">
+            <!-- Hero Section -->
+            <section class="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+                <div class="text-center z-10 px-4 fade-in">
+                    <div class="floating-animation mb-8">
+                        <i class="fas fa-globe text-6xl mb-6 text-yellow-300"></i>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                        Jelajahi Keindahan<br>
+                        <span class="text-yellow-300">Dunia</span>
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
+                        Temukan destinasi impian Anda bersama kami dan ciptakan kenangan tak terlupakan
+                    </p>
+                    <div class="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
+                        <button onclick="showPage('destinations')" class="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold px-8 py-4 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-compass mr-2"></i>Mulai Petualangan
+                        </button>
+                        <button onclick="showPage('packages')" class="bg-white/20 backdrop-blur-md hover:bg-white/30 text-white border-2 border-white/30 px-8 py-4 rounded-full text-lg transition-all duration-300">
+                            <i class="fas fa-gift mr-2"></i>Lihat Paket
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Floating Elements -->
+                <div class="absolute top-20 left-10 floating-animation opacity-30">
+                    <i class="fas fa-paper-plane text-3xl text-yellow-300"></i>
+                </div>
+                <div class="absolute bottom-32 right-16 floating-animation opacity-30" style="animation-delay: -2s;">
+                    <i class="fas fa-mountain text-4xl text-blue-300"></i>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid md:grid-cols-4 gap-8 text-center">
+                        <div class="fade-in">
+                            <div class="text-4xl font-bold mb-2">500+</div>
+                            <div class="text-blue-100">Destinasi</div>
+                        </div>
+                        <div class="fade-in" style="animation-delay: 0.2s;">
+                            <div class="text-4xl font-bold mb-2">10K+</div>
+                            <div class="text-blue-100">Pelanggan Puas</div>
+                        </div>
+                        <div class="fade-in" style="animation-delay: 0.4s;">
+                            <div class="text-4xl font-bold mb-2">50+</div>
+                            <div class="text-blue-100">Negara</div>
+                        </div>
+                        <div class="fade-in" style="animation-delay: 0.6s;">
+                            <div class="text-4xl font-bold mb-2">24/7</div>
+                            <div class="text-blue-100">Dukungan</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Destinations -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-bold gradient-text mb-4">Destinasi Populer</h2>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Jelajahi tempat-tempat menakjubkan yang telah dipilih khusus untuk Anda</p>
+                    </div>
+                    <div id="featuredDestinations" class="grid md:grid-cols-3 gap-8 mb-12">
+                        <!-- Destinations will be loaded here -->
+                    </div>
+                    <div class="text-center">
+                        <button onclick="showPage('destinations')" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-map-marked-alt mr-2"></i>Lihat Semua Destinasi
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Packages -->
+            <section class="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-bold gradient-text mb-4">Paket Wisata Terbaik</h2>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Nikmati pengalaman tak terlupakan dengan paket wisata yang telah dirancang khusus</p>
+                    </div>
+                    <div id="featuredPackages" class="grid md:grid-cols-3 gap-8 mb-12">
+                        <!-- Packages will be loaded here -->
+                    </div>
+                    <div class="text-center">
+                        <button onclick="showPage('packages')" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="fas fa-suitcase-rolling mr-2"></i>Lihat Semua Paket
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-bold gradient-text mb-4">Mengapa Memilih Kami?</h2>
+                        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Kami berkomitmen memberikan pengalaman terbaik untuk setiap perjalanan Anda</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 card-hover">
+                            <div class="bg-gradient-to-r from-blue-600 to-purple-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-shield-alt text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Terpercaya & Aman</h3>
+                            <p class="text-gray-600">Perjalanan Anda dijamin aman dengan asuransi lengkap dan panduan berpengalaman</p>
+                        </div>
+                        <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-blue-50 card-hover">
+                            <div class="bg-gradient-to-r from-green-600 to-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-dollar-sign text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Harga Terjangkau</h3>
+                            <p class="text-gray-600">Dapatkan pengalaman premium dengan harga yang bersahabat dan berbagai pilihan paket</p>
+                        </div>
+                        <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 card-hover">
+                            <div class="bg-gradient-to-r from-purple-600 to-pink-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-headset text-white text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Dukungan 24/7</h3>
+                            <p class="text-gray-600">Tim customer service kami siap membantu Anda kapan saja, di mana saja</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Destinations Page -->
+        <div id="destinationsPage" class="page-content pt-20">
+            <section class="py-16 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Destinasi Wisata</h1>
+                    <p class="text-xl opacity-90">Temukan tempat-tempat menakjubkan di seluruh dunia</p>
+                </div>
+            </section>
+            
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="mb-8">
+                        <div class="flex flex-wrap gap-4 justify-center">
+                            <button onclick="filterDestinations('all')" class="filter-btn bg-blue-600 text-white px-6 py-2 rounded-full">Semua</button>
+                            <button onclick="filterDestinations('asia')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full">Asia</button>
+                            <button onclick="filterDestinations('europe')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full">Eropa</button>
+                            <button onclick="filterDestinations('america')" class="filter-btn bg-gray-200 text-gray-700 px-6 py-2 rounded-full">Amerika</button>
+                        </div>
+                    </div>
+                    <div id="allDestinations" class="grid md:grid-cols-3 gap-8">
+                        <!-- All destinations will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Packages Page -->
+        <div id="packagesPage" class="page-content pt-20">
+            <section class="py-16 bg-gradient-to-br from-purple-600 to-pink-600 text-white">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Paket Wisata</h1>
+                    <p class="text-xl opacity-90">Pilih paket wisata yang sesuai dengan kebutuhan Anda</p>
+                </div>
+            </section>
+            
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div id="allPackages" class="grid md:grid-cols-3 gap-8">
+                        <!-- All packages will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="aboutPage" class="page-content pt-20">
+            <section class="py-16 bg-gradient-to-br from-green-600 to-blue-600 text-white">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Tentang Kami</h1>
+                    <p class="text-xl opacity-90">Mengenal lebih dekat Wanderlust Travel</p>
+                </div>
+            </section>
+            
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold gradient-text mb-6">Perjalanan Dimulai dari Mimpi</h2>
+                            <p class="text-gray-600 mb-6">Wanderlust Travel didirikan dengan visi untuk membuat perjalanan impian menjadi kenyataan. Kami percaya bahwa setiap orang berhak merasakan keindahan dunia dan menciptakan kenangan tak terlupakan.</p>
+                            <p class="text-gray-600 mb-6">Dengan pengalaman lebih dari 10 tahun di industri pariwisata, kami telah membantu ribuan pelanggan menjelajahi destinasi impian mereka dengan aman dan nyaman.</p>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span>Panduan wisata berpengalaman</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span>Asuransi perjalanan lengkap</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <span>Harga transparan tanpa biaya tersembunyi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-gradient-to-br from-blue-100 to-purple-100 p-8 rounded-2xl">
+                                <i class="fas fa-users text-6xl text-blue-600 mb-6"></i>
+                                <h3 class="text-2xl font-bold mb-4">Tim Profesional</h3>
+                                <p class="text-gray-600">Didukung oleh tim yang berpengalaman dan berdedikasi untuk memberikan pelayanan terbaik</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Admin Page -->
+        <div id="adminPage" class="page-content pt-20">
+            <section class="py-16 bg-gradient-to-br from-green-600 to-teal-600 text-white">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Admin Panel</h1>
+                    <p class="text-xl opacity-90">Kelola konten website travel Anda</p>
+                </div>
+            </section>
+            
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <!-- Admin Navigation -->
+                    <div class="mb-8">
+                        <div class="flex flex-wrap gap-4 justify-center">
+                            <button onclick="showAdminSection('destinations')" class="admin-nav-btn bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">
+                                <i class="fas fa-map-marker-alt mr-2"></i>Kelola Destinasi
+                            </button>
+                            <button onclick="showAdminSection('packages')" class="admin-nav-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium">
+                                <i class="fas fa-box mr-2"></i>Kelola Paket
+                            </button>
+                            <button onclick="showAdminSection('bookings')" class="admin-nav-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium">
+                                <i class="fas fa-calendar-check mr-2"></i>Kelola Pemesanan
+                            </button>
+                            <button onclick="showAdminSection('stats')" class="admin-nav-btn bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium">
+                                <i class="fas fa-chart-bar mr-2"></i>Statistik
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Destinations Management -->
+                    <div id="adminDestinations" class="admin-section">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold gradient-text">Kelola Destinasi</h2>
+                                <button onclick="showAddDestinationModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Destinasi
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b">
+                                            <th class="text-left py-3 px-4">Nama</th>
+                                            <th class="text-left py-3 px-4">Kategori</th>
+                                            <th class="text-left py-3 px-4">Harga</th>
+                                            <th class="text-left py-3 px-4">Rating</th>
+                                            <th class="text-left py-3 px-4">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="destinationsTable">
+                                        <!-- Destinations will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Packages Management -->
+                    <div id="adminPackages" class="admin-section hidden">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold gradient-text">Kelola Paket Wisata</h2>
+                                <button onclick="showAddPackageModal()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                    <i class="fas fa-plus mr-2"></i>Tambah Paket
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b">
+                                            <th class="text-left py-3 px-4">Nama Paket</th>
+                                            <th class="text-left py-3 px-4">Durasi</th>
+                                            <th class="text-left py-3 px-4">Harga</th>
+                                            <th class="text-left py-3 px-4">Rating</th>
+                                            <th class="text-left py-3 px-4">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="packagesTable">
+                                        <!-- Packages will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bookings Management -->
+                    <div id="adminBookings" class="admin-section hidden">
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold gradient-text">Kelola Pemesanan</h2>
+                                <div class="flex space-x-2">
+                                    <button onclick="filterBookings('all')" class="booking-filter-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">Semua</button>
+                                    <button onclick="filterBookings('pending')" class="booking-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm">Pending</button>
+                                    <button onclick="filterBookings('confirmed')" class="booking-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm">Dikonfirmasi</button>
+                                    <button onclick="filterBookings('cancelled')" class="booking-filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm">Dibatalkan</button>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="border-b">
+                                            <th class="text-left py-3 px-4">ID Booking</th>
+                                            <th class="text-left py-3 px-4">Nama</th>
+                                            <th class="text-left py-3 px-4">Item</th>
+                                            <th class="text-left py-3 px-4">Tanggal</th>
+                                            <th class="text-left py-3 px-4">Status</th>
+                                            <th class="text-left py-3 px-4">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bookingsTable">
+                                        <!-- Bookings will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div id="adminStats" class="admin-section hidden">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-2xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-blue-100">Total Destinasi</p>
+                                        <p class="text-3xl font-bold" id="totalDestinations">0</p>
+                                    </div>
+                                    <i class="fas fa-map-marker-alt text-4xl text-blue-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-2xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-purple-100">Total Paket</p>
+                                        <p class="text-3xl font-bold" id="totalPackages">0</p>
+                                    </div>
+                                    <i class="fas fa-box text-4xl text-purple-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-2xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-green-100">Rata-rata Rating</p>
+                                        <p class="text-3xl font-bold" id="averageRating">0</p>
+                                    </div>
+                                    <i class="fas fa-star text-4xl text-green-200"></i>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-2xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-orange-100">Kategori Populer</p>
+                                        <p class="text-xl font-bold" id="popularCategory">Asia</p>
+                                    </div>
+                                    <i class="fas fa-chart-pie text-4xl text-orange-200"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-2xl shadow-lg p-8">
+                            <h3 class="text-xl font-bold mb-4">Aktivitas Terbaru</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center p-4 bg-blue-50 rounded-lg">
+                                    <i class="fas fa-plus-circle text-blue-600 mr-3"></i>
+                                    <span>Destinasi baru "Bali, Indonesia" ditambahkan</span>
+                                    <span class="ml-auto text-sm text-gray-500">2 jam yang lalu</span>
+                                </div>
+                                <div class="flex items-center p-4 bg-green-50 rounded-lg">
+                                    <i class="fas fa-edit text-green-600 mr-3"></i>
+                                    <span>Paket "Honeymoon Bali" diperbarui</span>
+                                    <span class="ml-auto text-sm text-gray-500">5 jam yang lalu</span>
+                                </div>
+                                <div class="flex items-center p-4 bg-purple-50 rounded-lg">
+                                    <i class="fas fa-star text-purple-600 mr-3"></i>
+                                    <span>Rating destinasi "Tokyo" diperbarui</span>
+                                    <span class="ml-auto text-sm text-gray-500">1 hari yang lalu</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contactPage" class="page-content pt-20">
+            <section class="py-16 bg-gradient-to-br from-orange-600 to-red-600 text-white">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">Hubungi Kami</h1>
+                    <p class="text-xl opacity-90">Kami siap membantu merencanakan perjalanan impian Anda</p>
+                </div>
+            </section>
+            
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="grid md:grid-cols-2 gap-12">
+                        <div>
+                            <h2 class="text-3xl font-bold gradient-text mb-8">Informasi Kontak</h2>
+                            <div class="space-y-6">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                        <i class="fas fa-map-marker-alt text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Alamat</h3>
+                                        <p class="text-gray-600">Jl. Sudirman No. 123, Jakarta Pusat</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="bg-green-100 p-3 rounded-full mr-4">
+                                        <i class="fas fa-phone text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Telepon</h3>
+                                        <p class="text-gray-600">+62 21 1234 5678</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                        <i class="fas fa-envelope text-purple-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Email</h3>
+                                        <p class="text-gray-600">info@wanderlusttravel.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <form onsubmit="handleContactForm(event)" class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                                    <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                    <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
+                                    <textarea rows="4" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                                    <i class="fas fa-paper-plane mr-2"></i>Kirim Pesan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Add Destination Modal -->
+    <div id="addDestinationModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Tambah Destinasi Baru</h2>
+            </div>
+            <form onsubmit="handleAddDestination(event)">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Destinasi</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select name="category" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Pilih Kategori</option>
+                            <option value="asia">Asia</option>
+                            <option value="europe">Eropa</option>
+                            <option value="america">Amerika</option>
+                            <option value="africa">Afrika</option>
+                            <option value="oceania">Oseania</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
+                        <input type="text" name="price" required placeholder="Rp 2.500.000" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <input type="number" name="rating" min="1" max="5" step="0.1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Destinasi</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                        <input type="file" name="image" id="destImageInput" accept="image/*" class="hidden" onchange="previewDestinationImage(event)">
+                        <div id="destImagePreview" class="hidden mb-4">
+                            <img id="destPreviewImg" src="" alt="Preview" class="max-w-full h-32 object-cover rounded-lg mx-auto">
+                            <button type="button" onclick="removeDestinationImage()" class="mt-2 text-red-500 hover:text-red-700 text-sm">
+                                <i class="fas fa-trash mr-1"></i>Hapus Gambar
+                            </button>
+                        </div>
+                        <div id="destImagePlaceholder">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-600 mb-2">Klik untuk upload gambar atau drag & drop</p>
+                            <p class="text-sm text-gray-500">PNG, JPG, JPEG hingga 5MB</p>
+                        </div>
+                        <button type="button" onclick="document.getElementById('destImageInput').click()" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-upload mr-2"></i>Pilih Gambar
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                    <textarea name="description" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>Tambah Destinasi
+                    </button>
+                    <button type="button" onclick="closeAddDestinationModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Package Modal -->
+    <div id="addPackageModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Tambah Paket Wisata Baru</h2>
+            </div>
+            <form onsubmit="handleAddPackage(event)">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Paket</label>
+                        <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Durasi</label>
+                        <input type="text" name="duration" required placeholder="5 Hari 4 Malam" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
+                        <input type="text" name="price" required placeholder="Rp 8.500.000" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <input type="number" name="rating" min="1" max="5" step="0.1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Paket</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                        <input type="file" name="image" id="pkgImageInput" accept="image/*" class="hidden" onchange="previewPackageImage(event)">
+                        <div id="pkgImagePreview" class="hidden mb-4">
+                            <img id="pkgPreviewImg" src="" alt="Preview" class="max-w-full h-32 object-cover rounded-lg mx-auto">
+                            <button type="button" onclick="removePackageImage()" class="mt-2 text-red-500 hover:text-red-700 text-sm">
+                                <i class="fas fa-trash mr-1"></i>Hapus Gambar
+                            </button>
+                        </div>
+                        <div id="pkgImagePlaceholder">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-600 mb-2">Klik untuk upload gambar atau drag & drop</p>
+                            <p class="text-sm text-gray-500">PNG, JPG, JPEG hingga 5MB</p>
+                        </div>
+                        <button type="button" onclick="document.getElementById('pkgImageInput').click()" class="mt-3 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                            <i class="fas fa-upload mr-2"></i>Pilih Gambar
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Yang Termasuk (pisahkan dengan koma)</label>
+                    <textarea name="includes" rows="3" required placeholder="Hotel bintang 5, Romantic dinner, Spa couple, Private tour" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>Tambah Paket
+                    </button>
+                    <button type="button" onclick="closeAddPackageModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Destination Modal -->
+    <div id="editDestinationModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Edit Destinasi</h2>
+            </div>
+            <form onsubmit="handleEditDestination(event)">
+                <input type="hidden" name="id" id="editDestId">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Destinasi</label>
+                        <input type="text" name="name" id="editDestName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <select name="category" id="editDestCategory" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="asia">Asia</option>
+                            <option value="europe">Eropa</option>
+                            <option value="america">Amerika</option>
+                            <option value="africa">Afrika</option>
+                            <option value="oceania">Oseania</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
+                        <input type="text" name="price" id="editDestPrice" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <input type="number" name="rating" id="editDestRating" min="1" max="5" step="0.1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Destinasi</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                        <input type="file" name="image" id="editDestImageInput" accept="image/*" class="hidden" onchange="previewEditDestinationImage(event)">
+                        <div id="editDestImagePreview" class="mb-4">
+                            <img id="editDestPreviewImg" src="" alt="Current Image" class="max-w-full h-32 object-cover rounded-lg mx-auto">
+                            <button type="button" onclick="removeEditDestinationImage()" class="mt-2 text-red-500 hover:text-red-700 text-sm">
+                                <i class="fas fa-trash mr-1"></i>Hapus Gambar
+                            </button>
+                        </div>
+                        <div id="editDestImagePlaceholder" class="hidden">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-600 mb-2">Klik untuk upload gambar baru</p>
+                            <p class="text-sm text-gray-500">PNG, JPG, JPEG hingga 5MB</p>
+                        </div>
+                        <button type="button" onclick="document.getElementById('editDestImageInput').click()" class="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-upload mr-2"></i>Ganti Gambar
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                    <textarea name="description" id="editDestDescription" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                    </button>
+                    <button type="button" onclick="closeEditDestinationModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Package Modal -->
+    <div id="editPackageModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Edit Paket Wisata</h2>
+            </div>
+            <form onsubmit="handleEditPackage(event)">
+                <input type="hidden" name="id" id="editPkgId">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Paket</label>
+                        <input type="text" name="name" id="editPkgName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Durasi</label>
+                        <input type="text" name="duration" id="editPkgDuration" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
+                        <input type="text" name="price" id="editPkgPrice" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                        <input type="number" name="rating" id="editPkgRating" min="1" max="5" step="0.1" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Paket</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors">
+                        <input type="file" name="image" id="editPkgImageInput" accept="image/*" class="hidden" onchange="previewEditPackageImage(event)">
+                        <div id="editPkgImagePreview" class="mb-4">
+                            <img id="editPkgPreviewImg" src="" alt="Current Image" class="max-w-full h-32 object-cover rounded-lg mx-auto">
+                            <button type="button" onclick="removeEditPackageImage()" class="mt-2 text-red-500 hover:text-red-700 text-sm">
+                                <i class="fas fa-trash mr-1"></i>Hapus Gambar
+                            </button>
+                        </div>
+                        <div id="editPkgImagePlaceholder" class="hidden">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-600 mb-2">Klik untuk upload gambar baru</p>
+                            <p class="text-sm text-gray-500">PNG, JPG, JPEG hingga 5MB</p>
+                        </div>
+                        <button type="button" onclick="document.getElementById('editPkgImageInput').click()" class="mt-3 bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                            <i class="fas fa-upload mr-2"></i>Ganti Gambar
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Yang Termasuk (pisahkan dengan koma)</label>
+                    <textarea name="includes" id="editPkgIncludes" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                    </button>
+                    <button type="button" onclick="closeEditPackageModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Form Pemesanan</h2>
+                <p class="text-gray-600 mt-2" id="bookingItemName">Paket Honeymoon Bali</p>
+            </div>
+            <form onsubmit="handleBooking(event)">
+                <input type="hidden" name="itemId" id="bookingItemId">
+                <input type="hidden" name="itemType" id="bookingItemType">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                        <input type="text" name="fullName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                        <input type="tel" name="phone" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Peserta</label>
+                        <input type="number" name="participants" min="1" max="20" value="2" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Keberangkatan</label>
+                        <input type="date" name="departureDate" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Preferensi Hotel</label>
+                        <select name="hotelPreference" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="standard">Standard (3 Bintang)</option>
+                            <option value="deluxe">Deluxe (4 Bintang)</option>
+                            <option value="luxury">Luxury (5 Bintang)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Permintaan Khusus</label>
+                    <textarea name="specialRequests" rows="3" placeholder="Makanan halal, kamar connecting, dll..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg mt-4">
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold">Total Estimasi:</span>
+                        <span class="text-2xl font-bold text-blue-600" id="bookingTotal">Rp 17.000.000</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">*Harga dapat berubah sesuai dengan pilihan hotel dan tanggal keberangkatan</p>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-300">
+                        <i class="fas fa-paper-plane mr-2"></i>Kirim Pemesanan
+                    </button>
+                    <button type="button" onclick="closeBookingModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Cari Destinasi & Paket</h2>
+                <div class="mt-4">
+                    <input type="text" id="searchInput" placeholder="Cari destinasi, paket, atau lokasi..." class="w-full px-6 py-4 border border-gray-300 rounded-full text-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" onkeyup="performSearch()">
+                </div>
+            </div>
+            <div id="searchResults" class="space-y-4">
+                <!-- Search results will appear here -->
+            </div>
+            <div class="text-center mt-6">
+                <button onclick="closeSearchModal()" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition-all duration-300">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal fixed inset-0 bg-black/50 z-50 items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold gradient-text">Masuk ke Akun Anda</h2>
+                <p class="text-gray-600 mt-2">Selamat datang kembali!</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" name="password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                        Masuk
+                    </button>
+                </div>
+            </form>
+            <div class="text-center mt-6">
+                <button onclick="closeLoginModal()" class="text-gray-500 hover:text-gray-700">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg mr-3">
+                            <i class="fas fa-plane text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">Wanderlust Travel</span>
+                    </div>
+                    <p class="text-gray-400">Mewujudkan perjalanan impian Anda dengan pelayanan terbaik dan pengalaman tak terlupakan.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Layanan</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Paket Wisata</a></li>
+                        <li><a href="#" class="hover:text-white transition">Hotel</a></li>
+                        <li><a href="#" class="hover:text-white transition">Transportasi</a></li>
+                        <li><a href="#" class="hover:text-white transition">Asuransi</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Destinasi</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Asia</a></li>
+                        <li><a href="#" class="hover:text-white transition">Eropa</a></li>
+                        <li><a href="#" class="hover:text-white transition">Amerika</a></li>
+                        <li><a href="#" class="hover:text-white transition">Australia</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Ikuti Kami</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-pink-600 p-2 rounded-full hover:bg-pink-700 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-blue-400 p-2 rounded-full hover:bg-blue-500 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-red-600 p-2 rounded-full hover:bg-red-700 transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Wanderlust Travel. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data
+        const destinations = [
+            {
+                id: 1,
+                name: 'Bali, Indonesia',
+                category: 'asia',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2306b6d4" width="400" height="300"/><circle fill="%23f59e0b" cx="80" cy="80" r="40"/><polygon fill="%2310b981" points="0,200 150,150 300,180 400,160 400,300 0,300"/><rect fill="%23ffffff" x="150" y="100" width="100" height="80" opacity="0.8"/></svg>',
+                price: 'Rp 2.500.000',
+                rating: 4.8,
+                description: 'Pulau dewata dengan pantai eksotis dan budaya yang kaya'
+            },
+            {
+                id: 2,
+                name: 'Paris, Prancis',
+                category: 'europe',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23e5e7eb" width="400" height="300"/><polygon fill="%236b7280" points="200,50 180,150 220,150"/><rect fill="%23374151" x="190" y="150" width="20" height="100"/><circle fill="%23fbbf24" cx="100" cy="100" r="30"/></svg>',
+                price: 'Rp 15.000.000',
+                rating: 4.9,
+                description: 'Kota cinta dengan arsitektur klasik dan kuliner terbaik'
+            },
+            {
+                id: 3,
+                name: 'Tokyo, Jepang',
+                category: 'asia',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f3f4f6" width="400" height="300"/><rect fill="%23ef4444" x="50" y="50" width="80" height="120"/><rect fill="%233b82f6" x="150" y="80" width="60" height="90"/><rect fill="%2310b981" x="250" y="60" width="100" height="110"/><circle fill="%23fbbf24" cx="320" cy="80" r="25"/></svg>',
+                price: 'Rp 12.000.000',
+                rating: 4.7,
+                description: 'Perpaduan sempurna antara tradisi dan modernitas'
+            },
+            {
+                id: 4,
+                name: 'New York, Amerika',
+                category: 'america',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%234f46e5" width="400" height="300"/><rect fill="%23374151" x="50" y="100" width="40" height="150"/><rect fill="%236b7280" x="120" y="80" width="50" height="170"/><rect fill="%23374151" x="200" y="60" width="45" height="190"/><rect fill="%239ca3af" x="280" y="90" width="60" height="160"/></svg>',
+                price: 'Rp 18.000.000',
+                rating: 4.6,
+                description: 'Kota yang tidak pernah tidur dengan skyline menakjubkan'
+            },
+            {
+                id: 5,
+                name: 'Santorini, Yunani',
+                category: 'europe',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2306b6d4" width="400" height="300"/><circle fill="%23f59e0b" cx="350" cy="50" r="30"/><polygon fill="%23ffffff" points="50,200 100,180 150,190 200,170 250,185 300,175 350,180 400,170 400,300 0,300"/><rect fill="%233b82f6" x="80" y="160" width="20" height="20" rx="10"/></svg>',
+                price: 'Rp 20.000.000',
+                rating: 4.9,
+                description: 'Pulau romantis dengan pemandangan sunset terbaik'
+            },
+            {
+                id: 6,
+                name: 'Dubai, UAE',
+                category: 'asia',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23fbbf24" width="400" height="300"/><rect fill="%23374151" x="100" y="50" width="30" height="200"/><rect fill="%236b7280" x="150" y="80" width="40" height="170"/><rect fill="%23374151" x="210" y="30" width="35" height="220"/><rect fill="%239ca3af" x="270" y="70" width="50" height="180"/><circle fill="%23f59e0b" cx="50" cy="80" r="25"/></svg>',
+                price: 'Rp 16.000.000',
+                rating: 4.8,
+                description: 'Kemewahan modern di tengah gurun pasir'
+            }
+        ];
+
+        const packages = [
+            {
+                id: 1,
+                name: 'Paket Honeymoon Bali',
+                duration: '5 Hari 4 Malam',
+                price: 'Rp 8.500.000',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f472b6" width="400" height="300"/><circle fill="%23fbbf24" cx="80" cy="80" r="40"/><polygon fill="%2310b981" points="0,200 150,150 300,180 400,160 400,300 0,300"/><path fill="%23ffffff" d="M180,120 Q200,100 220,120 Q200,140 180,120" opacity="0.8"/></svg>',
+                includes: ['Hotel bintang 5', 'Romantic dinner', 'Spa couple', 'Private tour'],
+                rating: 4.9
+            },
+            {
+                id: 2,
+                name: 'Paket Keluarga Tokyo',
+                duration: '7 Hari 6 Malam',
+                price: 'Rp 25.000.000',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2306b6d4" width="400" height="300"/><rect fill="%23ef4444" x="50" y="50" width="80" height="120"/><rect fill="%233b82f6" x="150" y="80" width="60" height="90"/><circle fill="%23fbbf24" cx="320" cy="80" r="25"/><rect fill="%23ffffff" x="100" y="200" width="200" height="20" opacity="0.8"/></svg>',
+                includes: ['Tiket Disneyland', 'JR Pass', 'Hotel family room', 'City tour'],
+                rating: 4.8
+            },
+            {
+                id: 3,
+                name: 'Paket Backpacker Eropa',
+                duration: '14 Hari 13 Malam',
+                price: 'Rp 35.000.000',
+                image: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%2310b981" width="400" height="300"/><polygon fill="%236b7280" points="200,50 180,150 220,150"/><rect fill="%23374151" x="190" y="150" width="20" height="100"/><circle fill="%23fbbf24" cx="100" cy="100" r="30"/><rect fill="%23ffffff" x="50" y="200" width="300" height="10" opacity="0.6"/></svg>',
+                includes: ['Eurail pass', 'Hostel accommodation', 'City walking tours', 'Travel insurance'],
+                rating: 4.7
+            }
+        ];
+
+        // Navigation functions
+        function showPage(pageId) {
+            // Check admin access
+            if (pageId === 'admin' && !isLoggedIn) {
+                alert('Anda harus login sebagai admin untuk mengakses halaman ini.');
+                return;
+            }
+            
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + 'Page').classList.add('active');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-blue-600', 'font-bold');
+                link.classList.add('text-gray-700');
+            });
+            
+            // Load content based on page
+            if (pageId === 'home') {
+                loadFeaturedDestinations();
+                loadFeaturedPackages();
+            } else if (pageId === 'destinations') {
+                loadAllDestinations();
+            } else if (pageId === 'packages') {
+                loadAllPackages();
+            } else if (pageId === 'admin') {
+                loadAdminData();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Admin functions
+        function showAdminSection(section) {
+            // Hide all admin sections
+            document.querySelectorAll('.admin-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById('admin' + section.charAt(0).toUpperCase() + section.slice(1)).classList.remove('hidden');
+            
+            // Update admin navigation
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'bg-purple-600', 'bg-green-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            if (section === 'destinations') {
+                event.target.classList.add('bg-blue-600', 'text-white');
+                loadDestinationsTable();
+            } else if (section === 'packages') {
+                event.target.classList.add('bg-purple-600', 'text-white');
+                loadPackagesTable();
+            } else if (section === 'bookings') {
+                event.target.classList.add('bg-orange-600', 'text-white');
+                loadBookingsTable();
+            } else if (section === 'stats') {
+                event.target.classList.add('bg-green-600', 'text-white');
+                loadStats();
+            }
+        }
+
+        function loadAdminData() {
+            loadDestinationsTable();
+            loadBookingsTable();
+            loadStats();
+        }
+
+        function loadBookingsTable() {
+            const bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
+            const tbody = document.getElementById('bookingsTable');
+            
+            if (bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500">Belum ada pemesanan</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = bookings.map(booking => {
+                const statusColors = {
+                    pending: 'bg-yellow-100 text-yellow-800',
+                    confirmed: 'bg-green-100 text-green-800',
+                    cancelled: 'bg-red-100 text-red-800'
+                };
+                
+                const statusText = {
+                    pending: 'Pending',
+                    confirmed: 'Dikonfirmasi',
+                    cancelled: 'Dibatalkan'
+                };
+                
+                return `
+                    <tr class="border-b hover:bg-gray-50 booking-row" data-status="${booking.status}">
+                        <td class="py-3 px-4 font-mono text-sm">${booking.bookingId}</td>
+                        <td class="py-3 px-4">${booking.fullName}</td>
+                        <td class="py-3 px-4">
+                            <div class="text-sm">
+                                <div class="font-medium">${getItemName(booking.itemId, booking.itemType)}</div>
+                                <div class="text-gray-500">${booking.itemType === 'package' ? 'Paket' : 'Destinasi'}</div>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4">${formatDate(booking.departureDate)}</td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-medium ${statusColors[booking.status]}">
+                                ${statusText[booking.status]}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4">
+                            <div class="flex space-x-2">
+                                <button onclick="viewBookingDetails('${booking.bookingId}')" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                    <i class="fas fa-eye mr-1"></i>Detail
+                                </button>
+                                ${booking.status === 'pending' ? `
+                                    <button onclick="updateBookingStatus('${booking.bookingId}', 'confirmed')" class="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600 transition">
+                                        <i class="fas fa-check mr-1"></i>Konfirmasi
+                                    </button>
+                                    <button onclick="updateBookingStatus('${booking.bookingId}', 'cancelled')" class="bg-red-500 text-white px-2 py-1 rounded text-xs hover:bg-red-600 transition">
+                                        <i class="fas fa-times mr-1"></i>Batal
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getItemName(itemId, itemType) {
+            if (itemType === 'destination') {
+                const dest = destinations.find(d => d.id == itemId);
+                return dest ? dest.name : 'Destinasi tidak ditemukan';
+            } else {
+                const pkg = packages.find(p => p.id == itemId);
+                return pkg ? pkg.name : 'Paket tidak ditemukan';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        function filterBookings(status) {
+            const rows = document.querySelectorAll('.booking-row');
+            const buttons = document.querySelectorAll('.booking-filter-btn');
+            
+            // Update button styles
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            event.target.classList.add('bg-blue-600', 'text-white');
+            
+            // Filter rows
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function viewBookingDetails(bookingId) {
+            const bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
+            const booking = bookings.find(b => b.bookingId === bookingId);
+            
+            if (booking) {
+                const itemName = getItemName(booking.itemId, booking.itemType);
+                alert(`Detail Pemesanan ${bookingId}:
+                
+Nama: ${booking.fullName}
+Email: ${booking.email}
+Telepon: ${booking.phone}
+Item: ${itemName} (${booking.itemType === 'package' ? 'Paket' : 'Destinasi'})
+Jumlah Peserta: ${booking.participants} orang
+Tanggal Keberangkatan: ${formatDate(booking.departureDate)}
+Preferensi Hotel: ${booking.hotelPreference}
+Permintaan Khusus: ${booking.specialRequests || 'Tidak ada'}
+Status: ${booking.status}`);
+            }
+        }
+
+        function updateBookingStatus(bookingId, newStatus) {
+            const bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
+            const bookingIndex = bookings.findIndex(b => b.bookingId === bookingId);
+            
+            if (bookingIndex !== -1) {
+                bookings[bookingIndex].status = newStatus;
+                localStorage.setItem('wanderlust_bookings', JSON.stringify(bookings));
+                loadBookingsTable();
+                
+                const statusText = {
+                    confirmed: 'dikonfirmasi',
+                    cancelled: 'dibatalkan'
+                };
+                
+                alert(`Pemesanan ${bookingId} berhasil ${statusText[newStatus]}!`);
+            }
+        }
+
+        function loadDestinationsTable() {
+            const tbody = document.getElementById('destinationsTable');
+            tbody.innerHTML = destinations.map(dest => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium">${dest.name}</td>
+                    <td class="py-3 px-4">${dest.category.charAt(0).toUpperCase() + dest.category.slice(1)}</td>
+                    <td class="py-3 px-4">${dest.price}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-500 mr-1"></i>
+                            ${dest.rating}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button onclick="editDestination(${dest.id})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button onclick="deleteDestination(${dest.id})" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition">
+                                <i class="fas fa-trash mr-1"></i>Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadPackagesTable() {
+            const tbody = document.getElementById('packagesTable');
+            tbody.innerHTML = packages.map(pkg => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-3 px-4 font-medium">${pkg.name}</td>
+                    <td class="py-3 px-4">${pkg.duration}</td>
+                    <td class="py-3 px-4">${pkg.price}</td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-star text-yellow-500 mr-1"></i>
+                            ${pkg.rating}
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button onclick="editPackage(${pkg.id})" class="bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600 transition">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </button>
+                            <button onclick="deletePackage(${pkg.id})" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition">
+                                <i class="fas fa-trash mr-1"></i>Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadStats() {
+            document.getElementById('totalDestinations').textContent = destinations.length;
+            document.getElementById('totalPackages').textContent = packages.length;
+            
+            const avgRating = (destinations.reduce((sum, dest) => sum + dest.rating, 0) / destinations.length).toFixed(1);
+            document.getElementById('averageRating').textContent = avgRating;
+            
+            const categoryCount = {};
+            destinations.forEach(dest => {
+                categoryCount[dest.category] = (categoryCount[dest.category] || 0) + 1;
+            });
+            const popularCategory = Object.keys(categoryCount).reduce((a, b) => categoryCount[a] > categoryCount[b] ? a : b);
+            document.getElementById('popularCategory').textContent = popularCategory.charAt(0).toUpperCase() + popularCategory.slice(1);
+        }
+
+        // Modal functions for admin
+        function showAddDestinationModal() {
+            document.getElementById('addDestinationModal').classList.add('active');
+        }
+
+        function closeAddDestinationModal() {
+            document.getElementById('addDestinationModal').classList.remove('active');
+        }
+
+        function showAddPackageModal() {
+            document.getElementById('addPackageModal').classList.add('active');
+        }
+
+        function closeAddPackageModal() {
+            document.getElementById('addPackageModal').classList.remove('active');
+        }
+
+        function showEditDestinationModal() {
+            document.getElementById('editDestinationModal').classList.add('active');
+        }
+
+        function closeEditDestinationModal() {
+            document.getElementById('editDestinationModal').classList.remove('active');
+        }
+
+        // CRUD operations
+        function handleAddDestination(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            // Get uploaded image or use default
+            const imageFile = formData.get('image');
+            let imageUrl;
+            
+            if (imageFile && imageFile.size > 0) {
+                // Convert uploaded image to base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newDestination = {
+                        id: destinations.length + 1,
+                        name: formData.get('name'),
+                        category: formData.get('category'),
+                        price: formData.get('price'),
+                        rating: parseFloat(formData.get('rating')),
+                        description: formData.get('description'),
+                        image: e.target.result
+                    };
+                    
+                    destinations.push(newDestination);
+                    loadDestinationsTable();
+                    loadStats();
+                    closeAddDestinationModal();
+                    event.target.reset();
+                    removeDestinationImage();
+                    alert('Destinasi berhasil ditambahkan dengan gambar!');
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                // Use default generated image
+                const newDestination = {
+                    id: destinations.length + 1,
+                    name: formData.get('name'),
+                    category: formData.get('category'),
+                    price: formData.get('price'),
+                    rating: parseFloat(formData.get('rating')),
+                    description: formData.get('description'),
+                    image: generateDestinationImage(formData.get('category'))
+                };
+                
+                destinations.push(newDestination);
+                loadDestinationsTable();
+                loadStats();
+                closeAddDestinationModal();
+                event.target.reset();
+                removeDestinationImage();
+                alert('Destinasi berhasil ditambahkan!');
+            }
+        }
+
+        function handleAddPackage(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            // Get uploaded image or use default
+            const imageFile = formData.get('image');
+            
+            if (imageFile && imageFile.size > 0) {
+                // Convert uploaded image to base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newPackage = {
+                        id: packages.length + 1,
+                        name: formData.get('name'),
+                        duration: formData.get('duration'),
+                        price: formData.get('price'),
+                        rating: parseFloat(formData.get('rating')),
+                        includes: formData.get('includes').split(',').map(item => item.trim()),
+                        image: e.target.result
+                    };
+                    
+                    packages.push(newPackage);
+                    loadPackagesTable();
+                    loadStats();
+                    closeAddPackageModal();
+                    event.target.reset();
+                    removePackageImage();
+                    alert('Paket wisata berhasil ditambahkan dengan gambar!');
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                // Use default generated image
+                const newPackage = {
+                    id: packages.length + 1,
+                    name: formData.get('name'),
+                    duration: formData.get('duration'),
+                    price: formData.get('price'),
+                    rating: parseFloat(formData.get('rating')),
+                    includes: formData.get('includes').split(',').map(item => item.trim()),
+                    image: generatePackageImage()
+                };
+                
+                packages.push(newPackage);
+                loadPackagesTable();
+                loadStats();
+                closeAddPackageModal();
+                event.target.reset();
+                removePackageImage();
+                alert('Paket wisata berhasil ditambahkan!');
+            }
+        }
+
+        function editDestination(id) {
+            const destination = destinations.find(dest => dest.id === id);
+            if (destination) {
+                currentEditingId = id;
+                document.getElementById('editDestId').value = destination.id;
+                document.getElementById('editDestName').value = destination.name;
+                document.getElementById('editDestCategory').value = destination.category;
+                document.getElementById('editDestPrice').value = destination.price;
+                document.getElementById('editDestRating').value = destination.rating;
+                document.getElementById('editDestDescription').value = destination.description;
+                
+                // Show current image
+                document.getElementById('editDestPreviewImg').src = destination.image;
+                document.getElementById('editDestImagePreview').classList.remove('hidden');
+                document.getElementById('editDestImagePlaceholder').classList.add('hidden');
+                
+                showEditDestinationModal();
+            }
+        }
+
+        function handleEditDestination(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const id = parseInt(formData.get('id'));
+            
+            const destinationIndex = destinations.findIndex(dest => dest.id === id);
+            if (destinationIndex !== -1) {
+                const imageFile = formData.get('image');
+                
+                if (imageFile && imageFile.size > 0) {
+                    // New image uploaded
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        destinations[destinationIndex] = {
+                            ...destinations[destinationIndex],
+                            name: formData.get('name'),
+                            category: formData.get('category'),
+                            price: formData.get('price'),
+                            rating: parseFloat(formData.get('rating')),
+                            description: formData.get('description'),
+                            image: e.target.result
+                        };
+                        
+                        loadDestinationsTable();
+                        loadStats();
+                        closeEditDestinationModal();
+                        alert('Destinasi berhasil diperbarui dengan gambar baru!');
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    // Keep existing image
+                    destinations[destinationIndex] = {
+                        ...destinations[destinationIndex],
+                        name: formData.get('name'),
+                        category: formData.get('category'),
+                        price: formData.get('price'),
+                        rating: parseFloat(formData.get('rating')),
+                        description: formData.get('description')
+                    };
+                    
+                    loadDestinationsTable();
+                    loadStats();
+                    closeEditDestinationModal();
+                    alert('Destinasi berhasil diperbarui!');
+                }
+            }
+        }
+
+        function deleteDestination(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus destinasi ini?')) {
+                const index = destinations.findIndex(dest => dest.id === id);
+                if (index !== -1) {
+                    destinations.splice(index, 1);
+                    loadDestinationsTable();
+                    loadStats();
+                    alert('Destinasi berhasil dihapus!');
+                }
+            }
+        }
+
+        function editPackage(id) {
+            const package = packages.find(pkg => pkg.id === id);
+            if (package) {
+                currentEditingId = id;
+                document.getElementById('editPkgId').value = package.id;
+                document.getElementById('editPkgName').value = package.name;
+                document.getElementById('editPkgDuration').value = package.duration;
+                document.getElementById('editPkgPrice').value = package.price;
+                document.getElementById('editPkgRating').value = package.rating;
+                document.getElementById('editPkgIncludes').value = package.includes.join(', ');
+                
+                // Show current image
+                document.getElementById('editPkgPreviewImg').src = package.image;
+                document.getElementById('editPkgImagePreview').classList.remove('hidden');
+                document.getElementById('editPkgImagePlaceholder').classList.add('hidden');
+                
+                showEditPackageModal();
+            }
+        }
+
+        function deletePackage(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus paket ini?')) {
+                const index = packages.findIndex(pkg => pkg.id === id);
+                if (index !== -1) {
+                    packages.splice(index, 1);
+                    loadPackagesTable();
+                    loadStats();
+                    alert('Paket berhasil dihapus!');
+                }
+            }
+        }
+
+        // Image upload functions
+        function previewDestinationImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('destPreviewImg').src = e.target.result;
+                    document.getElementById('destImagePreview').classList.remove('hidden');
+                    document.getElementById('destImagePlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeDestinationImage() {
+            document.getElementById('destImageInput').value = '';
+            document.getElementById('destImagePreview').classList.add('hidden');
+            document.getElementById('destImagePlaceholder').classList.remove('hidden');
+        }
+
+        function previewPackageImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('pkgPreviewImg').src = e.target.result;
+                    document.getElementById('pkgImagePreview').classList.remove('hidden');
+                    document.getElementById('pkgImagePlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePackageImage() {
+            document.getElementById('pkgImageInput').value = '';
+            document.getElementById('pkgImagePreview').classList.add('hidden');
+            document.getElementById('pkgImagePlaceholder').classList.remove('hidden');
+        }
+
+        function previewEditDestinationImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editDestPreviewImg').src = e.target.result;
+                    document.getElementById('editDestImagePreview').classList.remove('hidden');
+                    document.getElementById('editDestImagePlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeEditDestinationImage() {
+            document.getElementById('editDestImageInput').value = '';
+            document.getElementById('editDestImagePreview').classList.add('hidden');
+            document.getElementById('editDestImagePlaceholder').classList.remove('hidden');
+        }
+
+        function previewEditPackageImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Ukuran file terlalu besar. Maksimal 5MB.');
+                    event.target.value = '';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editPkgPreviewImg').src = e.target.result;
+                    document.getElementById('editPkgImagePreview').classList.remove('hidden');
+                    document.getElementById('editPkgImagePlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeEditPackageImage() {
+            document.getElementById('editPkgImageInput').value = '';
+            document.getElementById('editPkgImagePreview').classList.add('hidden');
+            document.getElementById('editPkgImagePlaceholder').classList.remove('hidden');
+        }
+
+        function showEditPackageModal() {
+            document.getElementById('editPackageModal').classList.add('active');
+        }
+
+        function closeEditPackageModal() {
+            document.getElementById('editPackageModal').classList.remove('active');
+        }
+
+        function handleEditPackage(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const id = parseInt(formData.get('id'));
+            
+            const packageIndex = packages.findIndex(pkg => pkg.id === id);
+            if (packageIndex !== -1) {
+                const imageFile = formData.get('image');
+                
+                if (imageFile && imageFile.size > 0) {
+                    // New image uploaded
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        packages[packageIndex] = {
+                            ...packages[packageIndex],
+                            name: formData.get('name'),
+                            duration: formData.get('duration'),
+                            price: formData.get('price'),
+                            rating: parseFloat(formData.get('rating')),
+                            includes: formData.get('includes').split(',').map(item => item.trim()),
+                            image: e.target.result
+                        };
+                        
+                        loadPackagesTable();
+                        loadStats();
+                        closeEditPackageModal();
+                        alert('Paket berhasil diperbarui dengan gambar baru!');
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    // Keep existing image
+                    packages[packageIndex] = {
+                        ...packages[packageIndex],
+                        name: formData.get('name'),
+                        duration: formData.get('duration'),
+                        price: formData.get('price'),
+                        rating: parseFloat(formData.get('rating')),
+                        includes: formData.get('includes').split(',').map(item => item.trim())
+                    };
+                    
+                    loadPackagesTable();
+                    loadStats();
+                    closeEditPackageModal();
+                    alert('Paket berhasil diperbarui!');
+                }
+            }
+        }
+
+        // Helper functions
+        function generateDestinationImage(category) {
+            const colors = {
+                asia: '%2306b6d4',
+                europe: '%23e5e7eb',
+                america: '%234f46e5',
+                africa: '%23f59e0b',
+                oceania: '%2310b981'
+            };
+            const color = colors[category] || '%2306b6d4';
+            return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="${color}" width="400" height="300"/><circle fill="%23ffffff" cx="200" cy="150" r="50" opacity="0.3"/></svg>`;
+        }
+
+        function generatePackageImage() {
+            return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23f472b6" width="400" height="300"/><circle fill="%23ffffff" cx="200" cy="150" r="50" opacity="0.3"/></svg>';
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        // Admin state
+        let isLoggedIn = false;
+        let currentEditingId = null;
+
+        // Form handlers
+        function handleLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const email = formData.get('email') || event.target.querySelector('input[type="email"]').value;
+            const password = formData.get('password') || event.target.querySelector('input[type="password"]').value;
+            
+            console.log('Login attempt:', email, password); // Debug log
+            
+            // Simple admin login (in real app, this would be secure authentication)
+            if (email === 'admin@wanderlust.com' && password === 'admin123') {
+                isLoggedIn = true;
+                // Desktop
+                document.getElementById('loginButton').classList.add('hidden');
+                document.getElementById('profileMenu').classList.remove('hidden');
+                // Mobile
+                document.getElementById('mobileLoginButton').classList.add('hidden');
+                document.getElementById('mobileAdminAccess').classList.remove('hidden');
+                closeLoginModal();
+                event.target.reset();
+                alert('Selamat datang, Admin! Anda sekarang dapat mengakses panel admin.');
+            } else {
+                alert('Email atau password salah. Gunakan: admin@wanderlust.com / admin123');
+            }
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            // Desktop
+            document.getElementById('loginButton').classList.remove('hidden');
+            document.getElementById('profileMenu').classList.add('hidden');
+            // Close dropdown if open
+            document.getElementById('profileDropdown').classList.add('hidden');
+            // Mobile
+            document.getElementById('mobileLoginButton').classList.remove('hidden');
+            document.getElementById('mobileAdminAccess').classList.add('hidden');
+            showPage('home');
+            alert('Anda telah logout dari admin panel.');
+        }
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            const chevron = document.getElementById('profileChevron');
+            
+            dropdown.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const profileMenu = document.getElementById('profileMenu');
+            const dropdown = document.getElementById('profileDropdown');
+            const chevron = document.getElementById('profileChevron');
+            
+            if (profileMenu && !profileMenu.contains(event.target)) {
+                dropdown.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        });
+
+        function handleContactForm(event) {
+            event.preventDefault();
+            alert('Terima kasih! Pesan Anda telah terkirim. Kami akan segera menghubungi Anda.');
+            event.target.reset();
+        }
+
+        // Content loading functions
+        function loadFeaturedDestinations() {
+            const container = document.getElementById('featuredDestinations');
+            const featured = destinations.slice(0, 3);
+            
+            container.innerHTML = featured.map(dest => `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+                    <img src="${dest.image}" alt="${dest.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">${dest.name}</h3>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-sm">${dest.rating}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">${dest.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">${dest.price}</span>
+                            <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                                Pesan Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadFeaturedPackages() {
+            const container = document.getElementById('featuredPackages');
+            
+            container.innerHTML = packages.map(pkg => `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+                    <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">${pkg.name}</h3>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-sm">${pkg.rating}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-3">${pkg.duration}</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Termasuk:</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                ${pkg.includes.map(item => `<li><i class="fas fa-check text-green-500 mr-2"></i>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">${pkg.price}</span>
+                            <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                Pesan Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadAllDestinations() {
+            const container = document.getElementById('allDestinations');
+            
+            container.innerHTML = destinations.map(dest => `
+                <div class="destination-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-category="${dest.category}">
+                    <img src="${dest.image}" alt="${dest.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">${dest.name}</h3>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-sm">${dest.rating}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">${dest.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-blue-600">${dest.price}</span>
+                            <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                                Pesan Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadAllPackages() {
+            const container = document.getElementById('allPackages');
+            
+            container.innerHTML = packages.map(pkg => `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+                    <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold">${pkg.name}</h3>
+                            <div class="flex items-center text-yellow-500">
+                                <i class="fas fa-star mr-1"></i>
+                                <span class="text-sm">${pkg.rating}</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-3">${pkg.duration}</p>
+                        <div class="mb-4">
+                            <h4 class="font-semibold mb-2">Termasuk:</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                ${pkg.includes.map(item => `<li><i class="fas fa-check text-green-500 mr-2"></i>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-purple-600">${pkg.price}</span>
+                            <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                Pesan Sekarang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterDestinations(category) {
+            const cards = document.querySelectorAll('.destination-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update button styles
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            
+            event.target.classList.remove('bg-gray-200', 'text-gray-700');
+            event.target.classList.add('bg-blue-600', 'text-white');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Drag and drop functionality
+        function setupDragAndDrop() {
+            const dropZones = [
+                { zone: 'destImageInput', preview: 'destImagePreview', placeholder: 'destImagePlaceholder', img: 'destPreviewImg' },
+                { zone: 'pkgImageInput', preview: 'pkgImagePreview', placeholder: 'pkgImagePlaceholder', img: 'pkgPreviewImg' },
+                { zone: 'editDestImageInput', preview: 'editDestImagePreview', placeholder: 'editDestImagePlaceholder', img: 'editDestPreviewImg' }
+            ];
+
+            dropZones.forEach(zone => {
+                const input = document.getElementById(zone.zone);
+                const dropArea = input.parentElement;
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, preventDefaults, false);
+                });
+
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, () => dropArea.classList.add('border-blue-400', 'bg-blue-50'), false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropArea.addEventListener(eventName, () => dropArea.classList.remove('border-blue-400', 'bg-blue-50'), false);
+                });
+
+                dropArea.addEventListener('drop', (e) => handleDrop(e, zone), false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function handleDrop(e, zone) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    const input = document.getElementById(zone.zone);
+                    input.files = files;
+                    
+                    // Trigger change event
+                    const event = new Event('change', { bubbles: true });
+                    input.dispatchEvent(event);
+                }
+            }
+        }
+
+        // Search and booking functions
+        function showSearchModal() {
+            document.getElementById('searchModal').classList.add('active');
+            document.getElementById('searchInput').focus();
+        }
+
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.remove('active');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (query.length < 2) {
+                resultsContainer.innerHTML = '<p class="text-gray-500 text-center">Ketik minimal 2 karakter untuk mencari...</p>';
+                return;
+            }
+            
+            // Search in destinations
+            const destResults = destinations.filter(dest => 
+                dest.name.toLowerCase().includes(query) || 
+                dest.description.toLowerCase().includes(query) ||
+                dest.category.toLowerCase().includes(query)
+            );
+            
+            // Search in packages
+            const pkgResults = packages.filter(pkg => 
+                pkg.name.toLowerCase().includes(query) || 
+                pkg.includes.some(item => item.toLowerCase().includes(query))
+            );
+            
+            let html = '';
+            
+            if (destResults.length > 0) {
+                html += '<h3 class="text-lg font-bold mb-3 text-blue-600">Destinasi</h3>';
+                html += '<div class="grid md:grid-cols-2 gap-4 mb-6">';
+                destResults.forEach(dest => {
+                    html += `
+                        <div class="bg-white border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center space-x-4">
+                                <img src="${dest.image}" alt="${dest.name}" class="w-16 h-16 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold">${dest.name}</h4>
+                                    <p class="text-sm text-gray-600">${dest.description.substring(0, 60)}...</p>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="font-bold text-blue-600">${dest.price}</span>
+                                        <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}'); closeSearchModal()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                                            Pesan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            if (pkgResults.length > 0) {
+                html += '<h3 class="text-lg font-bold mb-3 text-purple-600">Paket Wisata</h3>';
+                html += '<div class="grid md:grid-cols-2 gap-4">';
+                pkgResults.forEach(pkg => {
+                    html += `
+                        <div class="bg-white border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                            <div class="flex items-center space-x-4">
+                                <img src="${pkg.image}" alt="${pkg.name}" class="w-16 h-16 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold">${pkg.name}</h4>
+                                    <p class="text-sm text-gray-600">${pkg.duration}</p>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="font-bold text-purple-600">${pkg.price}</span>
+                                        <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}'); closeSearchModal()" class="bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600">
+                                            Pesan
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            
+            if (destResults.length === 0 && pkgResults.length === 0) {
+                html = '<div class="text-center py-8"><i class="fas fa-search text-4xl text-gray-300 mb-4"></i><p class="text-gray-500">Tidak ada hasil yang ditemukan untuk "' + query + '"</p></div>';
+            }
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        function showBookingModal(itemId, itemType, itemName, itemPrice) {
+            document.getElementById('bookingItemId').value = itemId;
+            document.getElementById('bookingItemType').value = itemType;
+            document.getElementById('bookingItemName').textContent = itemName;
+            document.getElementById('bookingTotal').textContent = itemPrice;
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelector('input[name="departureDate"]').min = today;
+            
+            document.getElementById('bookingModal').classList.add('active');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.remove('active');
+        }
+
+        function handleBooking(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            // Simulate booking process
+            const bookingData = {
+                itemId: formData.get('itemId'),
+                itemType: formData.get('itemType'),
+                fullName: formData.get('fullName'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                participants: formData.get('participants'),
+                departureDate: formData.get('departureDate'),
+                hotelPreference: formData.get('hotelPreference'),
+                specialRequests: formData.get('specialRequests'),
+                bookingId: 'WL' + Date.now(),
+                status: 'pending'
+            };
+            
+            // Store booking (in real app, this would go to a database)
+            let bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
+            bookings.push(bookingData);
+            localStorage.setItem('wanderlust_bookings', JSON.stringify(bookings));
+            
+            closeBookingModal();
+            event.target.reset();
+            
+            alert(`Terima kasih ${bookingData.fullName}! Pemesanan Anda telah diterima dengan ID: ${bookingData.bookingId}. Tim kami akan menghubungi Anda dalam 24 jam.`);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedDestinations();
+            loadFeaturedPackages();
+            setupDragAndDrop();
+            
+            // Close modal when clicking outside
+            document.getElementById('loginModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLoginModal();
+                }
+            });
+            
+            // Close mobile menu when clicking outside
+            document.getElementById('mobileMenu').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981dc57c343b4109',t:'MTc1ODMzNDA2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

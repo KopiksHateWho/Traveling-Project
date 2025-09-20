@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="SELEKSI TUGAS 2"/>
+        <attribute name="authors" value="siswa-RPL-2"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-09-17 08:05:07 AM"/>
+        <attribute name="created" value="c2lzd2EtUlBMLTI7U0lTV0EtUlBMMi0yNTsyMDI1LTA5LTE3OzA3OjQxOjQ5IEFNOzMwODE="/>
+        <attribute name="edited" value="c2lzd2EtUlBMLTI7U0lTV0EtUlBMMi0yNTsyMDI1LTA5LTE3OzA4OjA1OjA3IEFNOzE7MzE4NA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="Uang, Waktu, Bayar" type="Integer" array="False" size=""/>
+            <output expression="&quot;============================&quot;" newline="True"/>
+            <output expression="&quot;Selamat Datang&quot;" newline="True"/>
+            <output expression="&quot;Disini aku akan membantu mu untuk&quot;" newline="True"/>
+            <output expression="&quot;akan ku sesuaikan juga dengan uang dan waktu mu yang ada &quot;" newline="True"/>
+            <output expression="&quot;merekomendasikan makanan yang pass untuk mu&quot;" newline="True"/>
+            <output expression="&quot;============================&quot;" newline="True"/>
+            <output expression="&quot;Berapa uang mu saat ini&quot;" newline="True"/>
+            <input variable="Uang"/>
+            <output expression="&quot;Berapa waktu mu yang ada&quot;" newline="True"/>
+            <input variable="Waktu"/>
+            <if expression="Uang &lt;= 10000">
+                <then>
+                    <if expression="waktu &lt;= 15">
+                        <then>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                            <output expression="&quot;waktumu sedikit jadi&quot;" newline="True"/>
+                            <output expression="&quot;menurutku kamu beli chiki aja buat ganjal perut&quot;" newline="True"/>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                        </then>
+                        <else>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                            <output expression="&quot;waktu mu banyak&quot;" newline="True"/>
+                            <output expression="&quot;jadi aku rekomenkan kamu soto&quot;" newline="True"/>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if expression="waktu &lt;= 15">
+                        <then>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                            <output expression="&quot;waktumu sisa sedikit&quot;" newline="True"/>
+                            <output expression="&quot;ku rekomendasikan sih mie goreng/kuah&quot;" newline="True"/>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                        </then>
+                        <else>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                            <output expression="&quot;waktumu banyak sekali&quot;" newline="True"/>
+                            <output expression="&quot;============================&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
