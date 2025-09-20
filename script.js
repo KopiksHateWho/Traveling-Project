@@ -1061,6 +1061,8 @@ function setupDragAndDrop() {
 }
 
 // Search and booking functions
+let pendingBooking = null;
+
 function showSearchModal() {
     document.getElementById('searchModal').classList.add('active');
     document.getElementById('searchInput').focus();
@@ -1170,12 +1172,23 @@ function closeBookingModal() {
     document.getElementById('bookingModal').classList.remove('active');
 }
 
+function showPaymentModal() {
+    document.getElementById('paymentModal').classList.remove('hidden');
+}
+
+function closePaymentModal() {
+    document.getElementById('paymentModal').classList.add('hidden');
+    pendingBooking = null; // Clear pending booking on cancel
+}
+
 function handleBooking(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
+    const itemName = document.getElementById('bookingItemName').textContent;
+    const itemPrice = document.getElementById('bookingTotal').textContent;
 
-    // Simulate booking process
-    const bookingData = {
+    // Store booking data temporarily
+    pendingBooking = {
         itemId: formData.get('itemId'),
         itemType: formData.get('itemType'),
         fullName: formData.get('fullName'),
@@ -1186,18 +1199,54 @@ function handleBooking(event) {
         hotelPreference: formData.get('hotelPreference'),
         specialRequests: formData.get('specialRequests'),
         bookingId: 'WL' + Date.now(),
-        status: 'pending'
+        status: 'pending' // Status is initially pending
     };
 
-    // Store booking (in real app, this would go to a database)
-    let bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
-    bookings.push(bookingData);
-    localStorage.setItem('wanderlust_bookings', JSON.stringify(bookings));
+    // Populate and show payment modal
+    document.getElementById('paymentSummary').textContent = `Menyelesaikan pesanan untuk: ${itemName}`;
+    document.getElementById('paymentTotal').textContent = itemPrice;
 
     closeBookingModal();
-    event.target.reset();
+    showPaymentModal();
+}
 
-    alert(`Terima kasih ${bookingData.fullName}! Pemesanan Anda telah diterima dengan ID: ${bookingData.bookingId}. Tim kami akan menghubungi Anda dalam 24 jam.`);
+function handlePayment(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const cardNumber = formData.get('cardNumber');
+
+    // Simple validation for simulation
+    if (!pendingBooking || !cardNumber || cardNumber.length < 16) {
+        alert('Detail pembayaran tidak valid. Mohon periksa kembali nomor kartu Anda.');
+        return;
+    }
+
+    // Simulate payment processing delay
+    alert('Memproses pembayaran Anda...');
+
+    setTimeout(() => {
+        // Update booking status to confirmed
+        pendingBooking.status = 'confirmed';
+
+        // Store booking in localStorage
+        let bookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '[]');
+        bookings.push(pendingBooking);
+        localStorage.setItem('wanderlust_bookings', JSON.stringify(bookings));
+
+        // Reset pending booking
+        const confirmedBookingId = pendingBooking.bookingId;
+        pendingBooking = null;
+
+        closePaymentModal();
+        event.target.reset();
+
+        alert(`Pembayaran berhasil! Pemesanan Anda telah dikonfirmasi dengan ID: ${confirmedBookingId}.`);
+
+        // Refresh admin table if visible
+        if (document.getElementById('adminPage').classList.contains('active')) {
+            loadBookingsTable();
+        }
+    }, 1500); // 1.5 second delay
 }
 
 // Initialize page
