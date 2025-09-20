@@ -891,7 +891,7 @@ function loadFeaturedDestinations() {
                 <p class="text-gray-600 mb-4">${dest.description}</p>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-bold text-blue-600">${dest.price}</span>
-                    <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                    <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="liyue-button-primary">
                         Pesan Sekarang
                     </button>
                 </div>
@@ -923,7 +923,7 @@ function loadFeaturedPackages() {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-bold text-purple-600">${pkg.price}</span>
-                    <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                    <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="liyue-button-primary">
                         Pesan Sekarang
                     </button>
                 </div>
@@ -949,7 +949,7 @@ function loadAllDestinations() {
                 <p class="text-gray-600 mb-4">${dest.description}</p>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-bold text-blue-600">${dest.price}</span>
-                    <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                    <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}')" class="liyue-button-primary">
                         Pesan Sekarang
                     </button>
                 </div>
@@ -981,7 +981,7 @@ function loadAllPackages() {
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-2xl font-bold text-purple-600">${pkg.price}</span>
-                    <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                    <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}')" class="liyue-button-primary">
                         Pesan Sekarang
                     </button>
                 </div>
@@ -1111,7 +1111,7 @@ function performSearch() {
                             <p class="text-sm text-gray-600">${dest.description.substring(0, 60)}...</p>
                             <div class="flex justify-between items-center mt-2">
                                 <span class="font-bold text-blue-600">${dest.price}</span>
-                                <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}'); closeSearchModal()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                                <button onclick="showBookingModal(${dest.id}, 'destination', '${dest.name}', '${dest.price}'); closeSearchModal()" class="liyue-button-primary py-1 px-3 text-sm">
                                     Pesan
                                 </button>
                             </div>
@@ -1136,7 +1136,7 @@ function performSearch() {
                             <p class="text-sm text-gray-600">${pkg.duration}</p>
                             <div class="flex justify-between items-center mt-2">
                                 <span class="font-bold text-purple-600">${pkg.price}</span>
-                                <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}'); closeSearchModal()" class="bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600">
+                                <button onclick="showBookingModal(${pkg.id}, 'package', '${pkg.name}', '${pkg.price}'); closeSearchModal()" class="liyue-button-primary py-1 px-3 text-sm">
                                     Pesan
                                 </button>
                             </div>
